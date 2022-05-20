@@ -165,33 +165,67 @@ def navegar(driver):
     botonNuevoLoteDemanda = esperarCargaElemento("botonNuevoLoteDemanda",driver)
     botonNuevoLoteDemanda.click()
 
+def verificarDatosCargados(informacion, driver):
+    print("Verificando los datos cargados.")
+
+    # textoLocalidad = driver.find_element(By.XPATH, 'select[@id="localidad"]')
+    # select = driver.find_element_by_id('localidad')
+    select = Select(WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//select[@id='localidad']"))))
+    textoLocalidad = select.first_selected_option
+    result = textoLocalidad.text
+    print("El texto es: ", result)
+    print("La información a cargar es: ", informacion[5])
+    if (result != informacion[5]):
+        print ("No coinciden. Ahora hay que recargar este campo")
+        droplistLocalidad = esperarCargaElemento("droplistLocalidad",driver)
+        droplistLocalidad.send_keys(informacion[5])
+        verificarDatosCargados(informacion, driver)
+
+
 # Carga los datos del profesional
 def cargarDatosProfesional(info,driver):
     sleep(15)
+    try:
+        textFieldCorreo = esperarCargaElemento("email",driver)
+        textFieldCorreo.send_keys(info[4])
+        sleep(randint(2,3))
+    except:
+        print("El correo no se cargó correctamente")
 
-    textFieldCorreo = esperarCargaElemento("email",driver)
-    textFieldCorreo.send_keys(info[4])
-    sleep(randint(2,3))
+    try:
+        droplistLocalidad = esperarCargaElemento("droplistLocalidad",driver)
+        droplistLocalidad.send_keys(info[5])
+        sleep(randint(2,3))
+    except:
+        print("El droplist localidad no se cargó correctamente")
 
-    droplistLocalidad = esperarCargaElemento("droplistLocalidad",driver)
-    droplistLocalidad.send_keys(info[5])
-    sleep(randint(2,3))
+    try:
+        droplistCompetencia = esperarCargaElemento("droplistCompetencia",driver)
+        droplistCompetencia.send_keys(info[6])
+        sleep(randint(2,3))
+    except:
+        print("El droplist competencia no se cargó correctamente")
 
-    droplistCompetencia = esperarCargaElemento("droplistCompetencia",driver)
-    droplistCompetencia.send_keys(info[6])
-    sleep(randint(2,3))
+    try:
+        droplistOrganismo = esperarCargaElemento("droplistOrganismo",driver)
+        droplistOrganismo.send_keys(info[7])
+        sleep(randint(2,3))
+    except:
+        print("El droplist organismo no se cargó correctamente")
 
-    droplistOrganismo = esperarCargaElemento("droplistOrganismo",driver)
-    droplistOrganismo.send_keys(info[7])
-    sleep(randint(2,3))
+    try:
+        droplistTipoCausa = esperarCargaElemento("droplistTipoCausa",driver)
+        droplistTipoCausa.send_keys(info[8])
+        sleep(randint(4,5))
+    except:
+        print("El droplist tipo de causa no se cargó correctamente")
 
-    droplistTipoCausa = esperarCargaElemento("droplistTipoCausa",driver)
-    droplistTipoCausa.send_keys(info[8])
-    sleep(randint(4,5))
-
-    droplistCausa = esperarCargaElemento("droplistCausa",driver)
-    droplistCausa.send_keys(info[9])
-    sleep(randint(2,3))
+    try:
+        droplistCausa = esperarCargaElemento("droplistCausa",driver)
+        droplistCausa.send_keys(info[9])
+        sleep(randint(2,3))
+    except:
+        print("El droplist causa no se cargó correctamente")
 
     scroll(driver)
 
@@ -202,7 +236,7 @@ def cargarDatosProfesional(info,driver):
     textFieldDomicilio = esperarCargaElemento("textFieldDomicilio",driver)
     textFieldDomicilio.send_keys(info[11])
     sleep(randint(2,3))
-8
+
 # Scrollea para que se vea cómo se van completando los campos
 def scroll(driver):
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
